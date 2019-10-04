@@ -3,18 +3,37 @@
            https://api.github.com/users/<your name>
 */
 
-/////////////// Uncomment this again for final testintg /////////////////
-// let myself = null;
-// axios
-//   .get ("https://api.github.com/users/danimal-johnson")
-//   .then(response => {
-//     console.log(response);
-//     // Process the data
-//     myself = response.data;
-//   })
-//   .catch(error => {
-//     console.error("The data was not returned");
-//   });
+
+const userLookup = function (username) {
+  let returnValue = null;
+  axios
+    .get (`https://api.github.com/users/${username}`)
+    .then(response => {
+      console.log(response);
+      // Process the data
+      returnValue = response.data;
+    })
+    .catch(error => {
+      console.error("The data was not returned");
+    });
+  return returnValue;
+}
+
+const getFollowerSummaries = function (urlString) {
+  let returnValue = null;
+  axios
+    // .get (`https://api.github.com/users/${username}`)
+    .get (urlString)
+    .then(response => {
+      console.log(response);
+      // Process the data
+      returnValue = response.data;
+    })
+    .catch(error => {
+      console.error("The data was not returned");
+    });
+  return returnValue;
+}
 
 ////////// This is just for temporary lookup to save on API calls //////////
   const me = {
@@ -50,7 +69,36 @@
     "created_at": "2016-07-02T21:09:34Z",
     "updated_at": "2019-09-25T07:08:14Z"
   }
-  
+
+
+////////// Temporary local lookup for API call ///////////////
+let myFollowers = [
+  {
+    "login": "joenelsong",
+    "id": 7134689,
+    "node_id": "MDQ6VXNlcjcxMzQ2ODk=",
+    "avatar_url": "https://avatars3.githubusercontent.com/u/7134689?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/joenelsong",
+    "html_url": "https://github.com/joenelsong",
+    "followers_url": "https://api.github.com/users/joenelsong/followers",
+    "following_url": "https://api.github.com/users/joenelsong/following{/other_user}",
+    "gists_url": "https://api.github.com/users/joenelsong/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/joenelsong/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/joenelsong/subscriptions",
+    "organizations_url": "https://api.github.com/users/joenelsong/orgs",
+    "repos_url": "https://api.github.com/users/joenelsong/repos",
+    "events_url": "https://api.github.com/users/joenelsong/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/joenelsong/received_events",
+    "type": "User",
+    "site_admin": false
+  }
+]
+
+let myName = "danimal-johnson";
+let myData = me; // userLookup (myName);
+// let myFollowers = getFollowerSummaries(myData.followers_url);  // Merge this with the next line
+let myFollowerNames = myFollowers.map( follower => follower.login );
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -77,29 +125,7 @@ const cardLocation = document.querySelector(".cards");
           user, and adding that card to the DOM.
 */
 
-////////// Temporary local lookup for API call ///////////////
-myFollowers = [
-  {
-    "login": "joenelsong",
-    "id": 7134689,
-    "node_id": "MDQ6VXNlcjcxMzQ2ODk=",
-    "avatar_url": "https://avatars3.githubusercontent.com/u/7134689?v=4",
-    "gravatar_id": "",
-    "url": "https://api.github.com/users/joenelsong",
-    "html_url": "https://github.com/joenelsong",
-    "followers_url": "https://api.github.com/users/joenelsong/followers",
-    "following_url": "https://api.github.com/users/joenelsong/following{/other_user}",
-    "gists_url": "https://api.github.com/users/joenelsong/gists{/gist_id}",
-    "starred_url": "https://api.github.com/users/joenelsong/starred{/owner}{/repo}",
-    "subscriptions_url": "https://api.github.com/users/joenelsong/subscriptions",
-    "organizations_url": "https://api.github.com/users/joenelsong/orgs",
-    "repos_url": "https://api.github.com/users/joenelsong/repos",
-    "events_url": "https://api.github.com/users/joenelsong/events{/privacy}",
-    "received_events_url": "https://api.github.com/users/joenelsong/received_events",
-    "type": "User",
-    "site_admin": false
-  }
-]
+
 //////////// Put the actual API call into this array. ////////////////
 const followersArray = [];
 
@@ -200,10 +226,13 @@ cardLocation.appendChild(fCard);
 // Add some fake followers to pad the mix
 
 
-/* List of LS Instructors Github username's: 
-  tetondan
-  dustinmyers
-  justsml
-  luishrd
-  bigknell
-*/
+// List of LS Instructors Github username's: 
+let lambdaInstructors =  
+  ["tetondan",
+  "dustinmyers",
+  "justsml",
+  "luishrd",
+  "bigknell"]
+
+lambdaInstructors.forEach( dude => console.log(`I know ${dude}`));
+
