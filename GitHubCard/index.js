@@ -3,102 +3,45 @@
            https://api.github.com/users/<your name>
 */
 
+let userData = {};
 
 const userLookup = function (username) {
-  let returnValue = null;
+  // let returnValue = null;
   axios
     .get (`https://api.github.com/users/${username}`)
     .then(response => {
       console.log(response);
       // Process the data
-      returnValue = response.data;
+      // returnValue = response.data;
+      return response.data;
+      // console.log("Got something...");
+      // console.log(returnValue);
     })
     .catch(error => {
-      console.error("The data was not returned");
+      console.error(`No data returned for ${username}`);
     });
-  return returnValue;
+  console.log("returning:");
+  //console.log(returnValue);
+  // console.log(userData);
+  return userData;
 }
 
 const getFollowerSummaries = function (urlString) {
-  let returnValue = null;
+  // let returnValue = null;
   axios
     // .get (`https://api.github.com/users/${username}`)
     .get (urlString)
     .then(response => {
       console.log(response);
       // Process the data
-      returnValue = response.data;
+      let returnValue = response.data;
     })
     .catch(error => {
-      console.error("The data was not returned");
+      console.error(`No data returned for ${urlString}`);
     });
   return returnValue;
 }
 
-////////// This is just for temporary lookup to save on API calls //////////
-  const me = {
-    "login": "danimal-johnson",
-    "id": 20260285,
-    "node_id": "MDQ6VXNlcjIwMjYwMjg1",
-    "avatar_url": "https://avatars0.githubusercontent.com/u/20260285?v=4",
-    "gravatar_id": "",
-    "url": "https://api.github.com/users/danimal-johnson",
-    "html_url": "https://github.com/danimal-johnson",
-    "followers_url": "https://api.github.com/users/danimal-johnson/followers",
-    "following_url": "https://api.github.com/users/danimal-johnson/following{/other_user}",
-    "gists_url": "https://api.github.com/users/danimal-johnson/gists{/gist_id}",
-    "starred_url": "https://api.github.com/users/danimal-johnson/starred{/owner}{/repo}",
-    "subscriptions_url": "https://api.github.com/users/danimal-johnson/subscriptions",
-    "organizations_url": "https://api.github.com/users/danimal-johnson/orgs",
-    "repos_url": "https://api.github.com/users/danimal-johnson/repos",
-    "events_url": "https://api.github.com/users/danimal-johnson/events{/privacy}",
-    "received_events_url": "https://api.github.com/users/danimal-johnson/received_events",
-    "type": "User",
-    "site_admin": false,
-    "name": "Dan Johnson",
-    "company": null,
-    "blog": "",
-    "location": null,
-    "email": null,
-    "hireable": null,
-    "bio": null,
-    "public_repos": 22,
-    "public_gists": 0,
-    "followers": 1,
-    "following": 1,
-    "created_at": "2016-07-02T21:09:34Z",
-    "updated_at": "2019-09-25T07:08:14Z"
-  }
-
-
-////////// Temporary local lookup for API call ///////////////
-let myFollowers = [
-  {
-    "login": "joenelsong",
-    "id": 7134689,
-    "node_id": "MDQ6VXNlcjcxMzQ2ODk=",
-    "avatar_url": "https://avatars3.githubusercontent.com/u/7134689?v=4",
-    "gravatar_id": "",
-    "url": "https://api.github.com/users/joenelsong",
-    "html_url": "https://github.com/joenelsong",
-    "followers_url": "https://api.github.com/users/joenelsong/followers",
-    "following_url": "https://api.github.com/users/joenelsong/following{/other_user}",
-    "gists_url": "https://api.github.com/users/joenelsong/gists{/gist_id}",
-    "starred_url": "https://api.github.com/users/joenelsong/starred{/owner}{/repo}",
-    "subscriptions_url": "https://api.github.com/users/joenelsong/subscriptions",
-    "organizations_url": "https://api.github.com/users/joenelsong/orgs",
-    "repos_url": "https://api.github.com/users/joenelsong/repos",
-    "events_url": "https://api.github.com/users/joenelsong/events{/privacy}",
-    "received_events_url": "https://api.github.com/users/joenelsong/received_events",
-    "type": "User",
-    "site_admin": false
-  }
-]
-
-let myName = "danimal-johnson";
-let myData = me; // userLookup (myName);
-// let myFollowers = getFollowerSummaries(myData.followers_url);  // Merge this with the next line
-let myFollowerNames = myFollowers.map( follower => follower.login );
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -127,7 +70,7 @@ const cardLocation = document.querySelector(".cards");
 
 
 //////////// Put the actual API call into this array. ////////////////
-const followersArray = [];
+// const followersArray = [];
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return
@@ -152,7 +95,8 @@ const followersArray = [];
 
 const createCard = function (person) {
 
-  console.log ("Making a card");
+  console.log (person);
+  console.log ("Making a card for " + person.name);
   // Create the card fields
   const newCard       = document.createElement("div");  // L1
   const newImage      = document.createElement("img");    // L2
@@ -203,36 +147,106 @@ const createCard = function (person) {
 
   return newCard;
 }
-/*
-
-  <img src={image url of user} />
-  <div class="card-info">
-    <p>Location: {users location}</p>
-    <p>Profile:  
-      <a href={address to users github page}>{address to users github page}</a>
-    </p>
-  </div>
-
-*/
-
-// Add Me
-let myCard = createCard (me);
-cardLocation.appendChild(myCard);
-
-// Add my real followers
-let fCard = createCard (myFollowers[0]);
-cardLocation.appendChild(fCard);
-
-// Add some fake followers to pad the mix
 
 
-// List of LS Instructors Github username's: 
-let lambdaInstructors =  
-  ["tetondan",
-  "dustinmyers",
-  "justsml",
-  "luishrd",
-  "bigknell"]
+////////// This is just for temporary lookup to save on API calls //////////
+  // const me = {
+  //   "login": "danimal-johnson",
+  //   "id": 20260285,
+  //   "node_id": "MDQ6VXNlcjIwMjYwMjg1",
+  //   "avatar_url": "https://avatars0.githubusercontent.com/u/20260285?v=4",
+  //   "gravatar_id": "",
+  //   "url": "https://api.github.com/users/danimal-johnson",
+  //   "html_url": "https://github.com/danimal-johnson",
+  //   "followers_url": "https://api.github.com/users/danimal-johnson/followers",
+  //   "following_url": "https://api.github.com/users/danimal-johnson/following{/other_user}",
+  //   "gists_url": "https://api.github.com/users/danimal-johnson/gists{/gist_id}",
+  //   "starred_url": "https://api.github.com/users/danimal-johnson/starred{/owner}{/repo}",
+  //   "subscriptions_url": "https://api.github.com/users/danimal-johnson/subscriptions",
+  //   "organizations_url": "https://api.github.com/users/danimal-johnson/orgs",
+  //   "repos_url": "https://api.github.com/users/danimal-johnson/repos",
+  //   "events_url": "https://api.github.com/users/danimal-johnson/events{/privacy}",
+  //   "received_events_url": "https://api.github.com/users/danimal-johnson/received_events",
+  //   "type": "User",
+  //   "site_admin": false,
+  //   "name": "Dan Johnson",
+  //   "company": null,
+  //   "blog": "",
+  //   "location": null,
+  //   "email": null,
+  //   "hireable": null,
+  //   "bio": null,
+  //   "public_repos": 22,
+  //   "public_gists": 0,
+  //   "followers": 1,
+  //   "following": 1,
+  //   "created_at": "2016-07-02T21:09:34Z",
+  //   "updated_at": "2019-09-25T07:08:14Z"
+  // }
 
-lambdaInstructors.forEach( dude => console.log(`I know ${dude}`));
 
+////////// Temporary local lookup for API call ///////////////
+// let myFollowers = [
+//   {
+//     "login": "joenelsong",
+//     "id": 7134689,
+//     "node_id": "MDQ6VXNlcjcxMzQ2ODk=",
+//     "avatar_url": "https://avatars3.githubusercontent.com/u/7134689?v=4",
+//     "gravatar_id": "",
+//     "url": "https://api.github.com/users/joenelsong",
+//     "html_url": "https://github.com/joenelsong",
+//     "followers_url": "https://api.github.com/users/joenelsong/followers",
+//     "following_url": "https://api.github.com/users/joenelsong/following{/other_user}",
+//     "gists_url": "https://api.github.com/users/joenelsong/gists{/gist_id}",
+//     "starred_url": "https://api.github.com/users/joenelsong/starred{/owner}{/repo}",
+//     "subscriptions_url": "https://api.github.com/users/joenelsong/subscriptions",
+//     "organizations_url": "https://api.github.com/users/joenelsong/orgs",
+//     "repos_url": "https://api.github.com/users/joenelsong/repos",
+//     "events_url": "https://api.github.com/users/joenelsong/events{/privacy}",
+//     "received_events_url": "https://api.github.com/users/joenelsong/received_events",
+//     "type": "User",
+//     "site_admin": false
+//   }
+// ]
+
+let myName = "danimal-johnson";
+let myData = userLookup(myName);
+console.log("Got my data back:");
+console.log(myData);
+// Add My Card
+let tempCard = createCard(myData);
+cardLocation.appendChild(tempCard);
+
+// createCard (myName);
+
+// axios
+//     .get (`https://api.github.com/users/${myName}`)
+//     .then(response => {
+//       console.log(response);
+//       // Process the data
+//       returnValue = response.data;
+//       // tempUserData = response.data;
+//     })
+//     .catch(error => {
+//       console.error(`No data returned for ${username}`);
+//     });
+
+
+
+
+
+// let myFollowers = getFollowerSummaries(myData.followers_url);  // Merge this with the next line
+// let myFollowerNames = myFollowers.map( follower => follower.login );
+
+// List of LS Instructors' Github usernames: 
+// let lambdaInstructors =  
+//   ["tetondan",
+//   "dustinmyers",
+//   "justsml",
+//   "luishrd",
+//   "bigknell"];
+
+// lambdaInstructors.forEach( follower => {
+//   tempCard = createCard(follower);
+//   cardLocation.appendChild(tempCard);
+// });
